@@ -59,16 +59,16 @@ class Seller:
         Select z[x] , Check  if z[x] = m1 mod prime'''
         m1 = self.m1
         x = self.price
-        quiet = True
+        quiet = False
 
-        if(m1%prime == z[-1]):
+        if(m1%prime == z[x-1]):
             if not quiet: print("y >= x") # Bob's secret is greater than or equal to Sally's secret
             if not quiet: print("DEAL:  Bobs offer to buy is greater than or equal to Sallys lowest acceptable offer")
-            return(False)
+            return(True)
         else:
             if not quiet: print("x > y") # Sally's secret is greater than Bob's secret"
             if not quiet: print("NO DEAL: Sallys lowest acceptable offer is higher than Bob\'s Highest buy price")
-            return(True)
+            return(False)
 
 # BUYER FUNCTIONS
 class Buyer:
@@ -201,12 +201,13 @@ def deal_or_no():
     z = json.loads(res['zval'])
 
     p = int(res['pval'])  # works
+    print(p)
 
     zi = [0] * len(z)
     # this is a long array of integers in string form, conver to ints
     for i in range(len(z)):
       zi[i] = int(z[i])
-    # print(zi)
+    print(zi)
     return jsonify(seller.deal_or_nodeal(zi,p))
 
 
