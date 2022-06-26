@@ -210,6 +210,36 @@ def deal_or_no():
     print(zi)
     return jsonify(seller.deal_or_nodeal(zi,p))
 
+@app.route('/runseller/<int:x>')
+@cross_origin(origin='*')
+def runseller(x):
+    msg = ''
+
+    # buyer = Buyer()
+    # buyer.set_price(y) #secret!
+    if buyer.price < r1 or buyer.price >r2:
+        msg = "buyer must set price first" 
+        exit
+
+    seller = Seller()
+    seller.set_price(x)  # secret!
+
+    pubkey = buyer.send_pubkey()
+    # print(pubkey)
+    pubkey[0]= int(pubkey[0])
+    pubkey[1] = int(pubkey[1])
+    c, N = seller.get_c(pubkey)
+    # print (c,N)
+    z, prime = buyer.get_z_array(c,N)
+    # print(z,prime)
+    result = seller.deal_or_nodeal(z, prime)
+
+    if result:
+        msg = "DEAL"
+    else:
+        msg = "NO DEAL"
+
+    return msg
 
 @app.route('/runtest/<int:x>/<int:y>')
 @cross_origin(origin='*')
@@ -237,7 +267,7 @@ def fulltest(x,y):
     else:
         msg = "failed"
 
-    return str(request.get_json(force=True))
+    return str(msg.get_json(force=True))
 
 
 if __name__ == '__main__':
