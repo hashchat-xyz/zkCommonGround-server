@@ -241,6 +241,34 @@ def runseller(x):
 
     return msg
 
+@app.route('/runbuyer/<int:y>')
+@cross_origin(origin='*')
+def runbuyer(y):
+    msg = ''
+
+    buyer = Buyer()
+    buyer.set_price(y) #secret!
+    if seller.price < r1 or seller.price >r2:
+        msg = "seller must set price first" 
+        exit
+
+    pubkey = buyer.send_pubkey()
+    # print(pubkey)
+    pubkey[0]= int(pubkey[0])
+    pubkey[1] = int(pubkey[1])
+    c, N = seller.get_c(pubkey)
+    # print (c,N)
+    z, prime = buyer.get_z_array(c,N)
+    # print(z,prime)
+    result = seller.deal_or_nodeal(z, prime)
+
+    if result:
+        msg = "DEAL"
+    else:
+        msg = "NO DEAL"
+
+    return msg
+
 @app.route('/runtest/<int:x>/<int:y>')
 @cross_origin(origin='*')
 def fulltest(x,y):
