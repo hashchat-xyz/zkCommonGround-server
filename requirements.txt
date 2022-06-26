@@ -2,3 +2,4 @@ pycryptodome
 flask
 flask_cors
 random2
+gunicorn
